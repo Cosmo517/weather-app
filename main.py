@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # weatherapi.com key can go below, between the '' otherwise, it will ask the user for a key
-key = '85cb60f6d01b410ab30165316232808'
+key = ''
 
 if key == '':
     key = input('Enter your key from weatherapi.com: ')
