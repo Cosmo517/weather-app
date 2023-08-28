@@ -1,8 +1,10 @@
 import json
 import requests
+import numpy as np
+import matplotlib.pyplot as plt
 
 # weatherapi.com key can go below, between the '' otherwise, it will ask the user for a key
-key = ''
+key = '85cb60f6d01b410ab30165316232808'
 
 if key == '':
     key = input('Enter your key from weatherapi.com: ')
@@ -56,3 +58,34 @@ for j in range(0, 24):
         print(i['hour'][j]['time'][-5:] + ' |  ' + str(i['hour'][j]['temp_f']) + '  |  ' +
               str(i['hour'][j]['temp_c']) + ' ' * 10, end="")
     print()
+
+
+#
+# Graphing Portion
+#
+temperature_data = [[] for _ in range(3)]  # 3 empty lists for each day (2d arrays basically)
+
+for i, day in enumerate(forecastDay):
+    for hour in day['hour']:
+        temperature_data[i].append(hour['temp_f'])  # Append temp for each hour in each list
+
+# Create labels
+time_labels = [hour['time'][-5:] for hour in forecastDay[0]['hour']]
+
+# Create subplots based on the number of days, can do more than just 1 or 3 because I'm different
+# but ur code makes it so that anything above 3 it stops working RIP, should work >3 though ?? Idk
+if chooseForecast == 1: # ! I hate you for naming the variable "chooseForecast" please change it to numOfDays or something
+    fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+else:
+    fig, axs = plt.subplots(chooseForecast, 1, figsize=(10, 5 * chooseForecast), sharex=True)
+
+# Plot temps for each day
+for i, ax in enumerate(axs):
+    ax.plot(time_labels, temperature_data[i], label=f'Day {i+1}')
+    ax.set_title(f'Day {i+1} Temperature Forecast')
+    ax.set_xlabel('Time (hours)') # For some reason this doesn't work on the third graph, fix please?
+    ax.set_ylabel('Temperature (°F)')
+    ax.legend()
+
+plt.tight_layout()
+plt.show()
